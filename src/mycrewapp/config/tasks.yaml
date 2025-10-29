@@ -1,0 +1,21 @@
+inquiry_task:
+  description: >
+    First, collect the patient's main health concern via the AskUser tool
+    (ignore {health_inquiry} if empty). Then, if necessary, ask at most one
+    clarifying question. Review the chat history: {chat_history}. Be concise and
+    avoid repeating the same question. After collecting input, summarize the
+    concern and key details (symptoms, duration, severity, medications).
+  expected_output: >
+    A detailed summary of the patient's health inquiry including all relevant
+    symptoms, concerns, and context that was gathered through questioning
+  agent: inquiry_agent
+
+advice_task:
+  description: >
+    Based on the inquiry information provided, analyze the health situation and
+    provide appropriate advice. If the situation is severe or requires
+    professional medical attention, use the Practo tool to book a consultation.
+  expected_output: >
+    Professional health advice based on the inquiry, with actions taken
+    (consultations booked when necessary)
+  agent: advisor_agent
