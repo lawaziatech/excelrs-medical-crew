@@ -21,6 +21,37 @@ class PractoTool(BaseTool):
         return f"Practo consultation booked. A doctor will contact you shortly."
 
 
+class EmailTool(BaseTool):
+    name: str = "Email_Notification"
+    description: str = (
+        "Send a confirmation email to the patient (dummy implementation). "
+        "Use this immediately after booking a consultation to notify the user "
+        "about their appointment details."
+    )
+
+    def _run(
+        self,
+        recipient_email: str | None = None,
+        subject: str | None = None,
+        body: str | None = None,
+        **kwargs,
+    ) -> str:
+        """Dummy email sender – just prints a message and returns a summary string."""
+        recipient = recipient_email or "patient@example.com"
+        subject_text = subject or "Your medical consultation has been booked"
+        body_text = body or "This is a confirmation that your consultation has been scheduled."
+
+        print(
+            f"[EmailTool] Sending email to {recipient} | "
+            f"Subject: {subject_text} | Body: {body_text}"
+        )
+
+        return (
+            f"Email confirmation prepared for {recipient} with subject "
+            f"'{subject_text}'. (Dummy email sent in this environment.)"
+        )
+
+
 class AskUserTool(BaseTool):
     # Instance-level counters so each tool instance has its own prompt budget
     prompt_count: int = 0

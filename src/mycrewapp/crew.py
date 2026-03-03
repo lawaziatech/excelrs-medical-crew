@@ -2,7 +2,7 @@ from crewai import Agent, Crew, Process, Task
 from crewai.project import CrewBase, agent, crew, task
 from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
-from mycrewapp.tools import PractoTool, AskUserTool
+from mycrewapp.tools import PractoTool, AskUserTool, EmailTool
 
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
@@ -36,7 +36,7 @@ class Mycrewapp():
         """Health Advice Bot powered by GPT-4 - provides advice and coordinates consultations"""
         return Agent(
             config=self.agents_config['advisor_agent'], # type: ignore[index]
-            tools=[PractoTool()],  # Can book consultations
+            tools=[PractoTool(), EmailTool()],  # Can book consultations and send email notifications
             verbose=True,
             allow_delegation=False
         )

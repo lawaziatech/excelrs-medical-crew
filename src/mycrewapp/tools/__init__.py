@@ -1,8 +1,8 @@
-from .custom_tool import PractoTool, AskUserTool
-## Only export the tools actually used by the crew
+from .custom_tool import PractoTool, AskUserTool, EmailTool
 
 __all__ = [
-    'PractoTool',
-    'AskUserTool',
+    "PractoTool",
+    "AskUserTool",
+    "EmailTool",
 ]
 
