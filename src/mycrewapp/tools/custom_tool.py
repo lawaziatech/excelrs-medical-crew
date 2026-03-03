@@ -2,6 +2,9 @@ from crewai.tools import BaseTool
 from typing import Type, ClassVar
 from pydantic import BaseModel, Field
 import requests
+import os
+from sendgrid import SendGridAPIClient
+from sendgrid.helpers.mail import Mail
 
 
 class PractoTool(BaseTool):
@@ -23,33 +26,22 @@ class PractoTool(BaseTool):
 
 class EmailTool(BaseTool):
     name: str = "Email_Notification"
-    description: str = (
-        "Send a confirmation email to the patient (dummy implementation). "
-        "Use this immediately after booking a consultation to notify the user "
-        "about their appointment details."
-    )
+    description: str = "Send a confirmation email to the patient using SendGrid."
 
-    def _run(
-        self,
-        recipient_email: str | None = None,
-        subject: str | None = None,
-        body: str | None = None,
-        **kwargs,
-    ) -> str:
-        """Dummy email sender – just prints a message and returns a summary string."""
-        recipient = recipient_email or "patient@example.com"
-        subject_text = subject or "Your medical consultation has been booked"
-        body_text = body or "This is a confirmation that your consultation has been scheduled."
+    def _run(self) -> str:
+        from_email = os.environ["SENDGRID_FROM_EMAIL"]
+        to_email = os.environ["SENDGRID_TO_DEFAULT"]
 
-        print(
-            f"[EmailTool] Sending email to {recipient} | "
-            f"Subject: {subject_text} | Body: {body_text}"
+        message = Mail(
+            from_email=from_email,
+            to_emails=to_email,
+            subject="Your medical consultation has been booked",
+            plain_text_content="This is a confirmation that your consultation has been scheduled.",
         )
 
-        return (
-            f"Email confirmation prepared for {recipient} with subject "
-            f"'{subject_text}'. (Dummy email sent in this environment.)"
-        )
+        client = SendGridAPIClient(os.environ["SENDGRID_API_KEY"])
+        response = client.send(message)
+        return f"SendGrid email status: {response.status_code}"
 
 
 class AskUserTool(BaseTool):
