@@ -1,6 +1,7 @@
 from crewai.tools import BaseTool
 from typing import Type, ClassVar
 from pydantic import BaseModel, Field
+import requests
 
 
 class PractoTool(BaseTool):
@@ -12,9 +13,11 @@ class PractoTool(BaseTool):
     )
     
     def _run(self) -> str:
-        default_note = "Severe case detected. Booking a medical consultation based on inquiry summary."
-        # API URL and key would be configured here
-        # make http call to Practo API
+        patient_info = {
+            "patientName": "John Doe",
+            "age": 50
+        }
+        response = requests.post("https://practotool.onrender.com/appointment", json=patient_info)
         return f"Practo consultation booked. A doctor will contact you shortly."
 
 
